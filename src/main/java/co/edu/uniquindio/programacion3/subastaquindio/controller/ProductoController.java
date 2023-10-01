@@ -8,6 +8,11 @@ import java.util.List;
 public class ProductoController implements IProductoControllerService {
 
     ModelFactoryController modelFactoryController;
+
+    public ProductoController() {
+        modelFactoryController = ModelFactoryController.getInstance();
+    }
+
     @Override
     public List<ProductoDTO> obtenerProductos() {
         return modelFactoryController.obtenerProductos();
@@ -20,11 +25,12 @@ public class ProductoController implements IProductoControllerService {
 
     @Override
     public boolean eliminarProducto(String codigoUnico) {
-        return false;
+
+        return modelFactoryController.eliminarProducto(codigoUnico);
     }
 
     @Override
     public boolean actualizarProducto(String codigoUnico, ProductoDTO productoDto) {
-        return false;
+        return modelFactoryController.actualizarProducto(codigoUnico, productoDto);
     }
 }

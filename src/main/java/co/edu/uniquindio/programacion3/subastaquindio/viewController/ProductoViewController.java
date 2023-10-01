@@ -22,7 +22,7 @@ public class ProductoViewController {
      * ObservableList<>, permite visualizarlo
      */
 
-    ObservableList<ProductoDTO> listaProductoDto = FXCollections.observableArrayList();
+    ObservableList<ProductoDTO> listaProductosDto = FXCollections.observableArrayList();
 
     ProductoDTO productoSeleccionado;
 
@@ -88,7 +88,7 @@ public class ProductoViewController {
 
     @FXML
     void actualizarProducto(ActionEvent event) {
-
+    actualizarProducto();
     }
 
     @FXML
@@ -99,7 +99,7 @@ public class ProductoViewController {
 
     @FXML
     void eliminarProducto(ActionEvent event) {
-
+        eliminarProducto();
     }
 
     private void crearProducto(){
@@ -111,16 +111,62 @@ public class ProductoViewController {
         // Validar la información
         if(datosValidos(productoDTO)){
             if(productoControllerService.agregarProducto(productoDTO)){
-                listaProductoDto.add(productoDTO);
-                mostrarMensaje("notificación productos", "Producto creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
+                listaProductosDto.add(productoDTO);
+                mostrarMensaje("notificación productos", "Producto creado", "El producto se ha creado con éxito", Alert.AlertType.INFORMATION);
                 limpiarCamposProductos();
             }else{
-                mostrarMensaje("notificación productos", "Producto NO creado", "El empleado NO se ha creado con éxito", Alert.AlertType.ERROR);
+                mostrarMensaje("notificación productos", "Producto NO creado", "El producto NO se ha creado con éxito", Alert.AlertType.ERROR);
             }
         }else{
             mostrarMensaje("notificación productos", "Producto NO creado", "Los datos ingresados son inválidos", Alert.AlertType.ERROR);
         }
 
+    }
+
+    private void eliminarProducto() {
+        boolean productoEliminado = false;
+        if(productoSeleccionado != null){
+            if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar el producto?")){
+                productoEliminado = productoControllerService.eliminarProducto(productoSeleccionado.codigoUnico());
+                if(productoEliminado == true){
+                    listaProductosDto.remove(productoSeleccionado);
+                    productoSeleccionado = null;
+                    tableProductos.getSelectionModel().clearSelection();
+                    limpiarCamposProductos();
+                    mostrarMensaje("Notificación producto", "Producto Eliminado", "El producto se ha eliminado con éxito", Alert.AlertType.INFORMATION);
+                }else{
+                    mostrarMensaje("Notificación producto", "Producto no eliminado", "El producto no se puede eliminar", Alert.AlertType.ERROR);
+                }
+            }
+        }else{
+            mostrarMensaje("Notificación producto", "Producto no seleccionado", "Seleccionado un producto de la lista", Alert.AlertType.WARNING);
+        }
+    }
+
+    private void actualizarProducto() {
+        boolean productoActualizado = false;
+        //1. Capturar los datos
+        String codigoUnico = productoSeleccionado.codigoUnico();
+        ProductoDTO productoDto = construirProductoDto();
+        //2. verificar el empleado seleccionado
+        if(productoSeleccionado != null){
+            //3. Validar la información
+            if(datosValidos(productoSeleccionado)){
+                productoActualizado = productoControllerService.actualizarProducto(codigoUnico,productoDto);
+                if(productoActualizado){
+                    listaProductosDto.remove(productoSeleccionado);
+                    listaProductosDto.add(productoDto);
+                    tableProductos.refresh();
+                    mostrarMensaje("Notificación producto", "Producto Actualizado", "El producto se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                    limpiarCamposProductos();
+                }else{
+                    mostrarMensaje("Notificación empleado", "Producto no actualizado", "El producto no se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                }
+            }else{
+                mostrarMensaje("Notificación producto", "Producto no creado", "Los datos ingresados son invalidos", Alert.AlertType.ERROR);
+            }
+
+        }
     }
 
     private ProductoDTO construirProductoDto(){
@@ -180,7 +226,19 @@ public class ProductoViewController {
      * Enlaza la columna con el dato, crea una especie de método .codigoUnico etc.
      * método anónimo
      */
+    @FXML
+    void initialize() {
+        productoControllerService = new ProductoController();
+        intiView();
+    }
 
+    private void intiView() {
+        initDataBinding();
+        obtenerProductos();
+        tableProductos.getItems().clear();
+        tableProductos.setItems(listaProductosDto);
+        listenerSelection();
+    }
     private void initDataBinding() {
         colCodigoUnico.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().codigoUnico()));
         colNombreProducto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().nombreProducto()));
@@ -192,7 +250,9 @@ public class ProductoViewController {
         colTipoProducto.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tipoProducto())));
 
     }
-
+    private void obtenerProductos() {
+        listaProductosDto.addAll(productoControllerService.obtenerProductos());
+    }
     /**
      * Método que identifica dónde se da click, se marca como elemento observable
      * oldselection, pone en azul la línea selecionada.
