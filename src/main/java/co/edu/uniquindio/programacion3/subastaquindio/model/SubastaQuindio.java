@@ -20,7 +20,7 @@ public class SubastaQuindio implements ISubastaQuindioService {
         Producto nuevoProducto = null;
         boolean productoExiste = verificarProductoExistente(codigoUnico);
         if(productoExiste){
-            throw new ProductoException("El producto con codigo unico: "+codigoUnico+" ya existe");
+            throw new ProductoException("El producto con código único: "+codigoUnico+" ya existe");
         }else{
             nuevoProducto = new Producto();
             nuevoProducto.setCodigoUnico(codigoUnico);
@@ -63,6 +63,6 @@ public class SubastaQuindio implements ISubastaQuindioService {
 
     @Override
     public ArrayList<Producto> obtenerProducto() {
-        return null;
+        return getListaProducto();
     }
 }

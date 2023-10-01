@@ -8,6 +8,11 @@ import java.util.List;
 public class ProductoController implements IProductoControllerService {
 
     ModelFactoryController modelFactoryController;
+
+    public ProductoController(){
+        modelFactoryController = ModelFactoryController.getInstance();
+    }
+
     @Override
     public List<ProductoDTO> obtenerProductos() {
         return modelFactoryController.obtenerProductos();

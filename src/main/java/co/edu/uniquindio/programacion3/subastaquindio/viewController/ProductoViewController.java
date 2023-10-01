@@ -22,7 +22,7 @@ public class ProductoViewController {
      * ObservableList<>, permite visualizarlo
      */
 
-    ObservableList<ProductoDTO> listaProductoDto = FXCollections.observableArrayList();
+    ObservableList<ProductoDTO> listaProductosDto = FXCollections.observableArrayList();
 
     ProductoDTO productoSeleccionado;
 
@@ -111,7 +111,7 @@ public class ProductoViewController {
         // Validar la información
         if(datosValidos(productoDTO)){
             if(productoControllerService.agregarProducto(productoDTO)){
-                listaProductoDto.add(productoDTO);
+                listaProductosDto.add(productoDTO);
                 mostrarMensaje("notificación productos", "Producto creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
                 limpiarCamposProductos();
             }else{
@@ -176,6 +176,20 @@ public class ProductoViewController {
 
     }
 
+    @FXML
+    void initialize() {
+        productoControllerService = new ProductoController();
+        intiView();
+    }
+
+    private void intiView() {
+        initDataBinding();
+        obtenerProductos();
+        tableProductos.getItems().clear();
+        tableProductos.setItems(listaProductosDto);
+        listenerSelection();
+    }
+
     /**
      * Enlaza la columna con el dato, crea una especie de método .codigoUnico etc.
      * método anónimo
@@ -191,6 +205,9 @@ public class ProductoViewController {
         colFechaFinPublicacion.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().fechaFinPublicacion()));
         colTipoProducto.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().tipoProducto())));
 
+    }
+    private void obtenerProductos() {
+        listaProductosDto.addAll(productoControllerService.obtenerProductos());
     }
 
     /**
