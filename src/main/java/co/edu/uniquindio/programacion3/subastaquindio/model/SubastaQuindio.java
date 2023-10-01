@@ -10,6 +10,7 @@ public class SubastaQuindio implements ISubastaQuindioService {
     private ArrayList<Producto> listaProducto = new ArrayList<>();
 
     public ArrayList<Producto> getListaProducto() {
+
         return listaProducto;
     }
 
@@ -42,6 +43,38 @@ public class SubastaQuindio implements ISubastaQuindioService {
     }
 
     @Override
+    public boolean actualizarProducto(String codigoActual, Producto producto) throws ProductoException {
+        Producto productoActual = obtenerProducto(codigoActual);
+        if(productoActual == null)
+            throw new ProductoException("El empleado a actualizar no existe");
+        else{
+            productoActual.setNombreProducto(productoActual.getNombreProducto());
+            productoActual.setCodigoUnico(producto.getCodigoUnico());
+            productoActual.setTipoProducto(producto.getTipoProducto());
+            productoActual.setAnunciante(producto.getAnunciante());
+            productoActual.setDescripcion(producto.getDescripcion());
+            productoActual.setFoto(producto.getFoto());
+            productoActual.setFechaPublicacion(producto.getFechaPublicacion());
+            productoActual.setFechaFinPublicacion(producto.getFechaFinPublicacion());
+            return true;
+        }
+    }
+
+    @Override
+    public Boolean eliminarProducto(String codigoUnico) throws ProductoException {
+        Producto producto = null;
+        boolean flagExiste = false;
+        producto = obtenerProducto(codigoUnico);
+        if(producto == null)
+            throw new ProductoException("El empleado a eliminar no existe");
+        else{
+            getListaProducto().remove(producto);
+            flagExiste = true;
+        }
+        return flagExiste;
+    }
+
+    @Override
     public boolean verificarProductoExistente(String codigoUnico) throws ProductoException{
         if(productoExiste(codigoUnico)){
             throw new ProductoException("El producto con el código único: "+ codigoUnico + "ya existe");
@@ -55,6 +88,18 @@ public class SubastaQuindio implements ISubastaQuindioService {
         for (Producto producto : getListaProducto()){
             if(producto.getCodigoUnico().equalsIgnoreCase(codigoUnico)){
                 productoEncontrado = true;
+                break;
+            }
+        }
+        return productoEncontrado;
+    }
+
+    @Override
+    public Producto obtenerProducto(String codigoUnico) {
+        Producto productoEncontrado = null;
+        for (Producto empleado : getListaProducto()) {
+            if(empleado.getCodigoUnico().equalsIgnoreCase(codigoUnico)){
+                productoEncontrado = empleado;
                 break;
             }
         }

@@ -67,11 +67,26 @@ public class ModelFactoryController implements IModelFactoryController {
 
     @Override
     public boolean eliminarProducto(String codigoUnico) {
-        return false;
+
+        boolean flagExiste = false;
+        try {
+            flagExiste = getSubasta().eliminarProducto(codigoUnico);
+        } catch (ProductoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return flagExiste;
     }
 
     @Override
-    public boolean actualizarProducto(String codigoUnico, ProductoDTO productoDto) {
-        return false;
+    public boolean actualizarProducto(String codigoActual, ProductoDTO productoDTO) {
+        try {
+            Producto producto = mapper.productoDtoToProducto(productoDTO);
+            getSubasta().actualizarProducto(codigoActual, producto);
+            return true;
+        } catch (ProductoException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("SubastaView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 750, 500);
-        stage.setTitle("Hello!");
+        stage.setTitle("Subasta Quindío");
         stage.setScene(scene);
         stage.show();
     }
