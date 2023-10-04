@@ -89,6 +89,8 @@ public class ProductoViewController {
     @FXML
     void actualizarProducto(ActionEvent event) {
 
+        actualizarProdcucto();
+
     }
 
     @FXML
@@ -99,6 +101,8 @@ public class ProductoViewController {
 
     @FXML
     void eliminarProducto(ActionEvent event) {
+
+        eliminarProducto();
 
     }
 
@@ -114,6 +118,7 @@ public class ProductoViewController {
                 listaProductosDto.add(productoDTO);
                 mostrarMensaje("notificación productos", "Producto creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
                 limpiarCamposProductos();
+                registrarAcciones("Producto agregado",1, "Agregar producto");
             }else{
                 mostrarMensaje("notificación productos", "Producto NO creado", "El empleado NO se ha creado con éxito", Alert.AlertType.ERROR);
             }
@@ -121,6 +126,54 @@ public class ProductoViewController {
             mostrarMensaje("notificación productos", "Producto NO creado", "Los datos ingresados son inválidos", Alert.AlertType.ERROR);
         }
 
+    }
+
+    private void eliminarProducto() {
+        boolean productoEliminado = false;
+        if(productoSeleccionado != null){
+            if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar al empleado?")){
+                productoEliminado = productoControllerService.eliminarProducto(productoSeleccionado.codigoUnico());
+                if(productoEliminado == true){
+                    listaProductosDto.remove(productoSeleccionado);
+                    productoSeleccionado = null;
+                    tableProductos.getSelectionModel().clearSelection();
+                    limpiarCamposProductos();
+                    registrarAcciones("Producto eliminado",1, "Eliminar producto");
+                    mostrarMensaje("Notificación producto", "Producto eliminado", "El producto se ha eliminado con éxito", Alert.AlertType.INFORMATION);
+                }else{
+                    mostrarMensaje("Notificación producto", "Producto no eliminado", "El producto no se puede eliminar", Alert.AlertType.ERROR);
+                }
+            }
+        }else{
+            mostrarMensaje("Notificación empleado", "Empleado no seleccionado", "Seleccionado un empleado de la lista", Alert.AlertType.WARNING);
+        }
+    }
+
+    private void actualizarProdcucto() {
+        boolean productoActualizado = false;
+        //1. Capturar los datos
+        String codigoUnico = productoSeleccionado.codigoUnico();
+        ProductoDTO productoDto = construirProductoDto();
+        //2. verificar el empleado seleccionado
+        if(productoSeleccionado != null){
+            //3. Validar la información
+            if(datosValidos(productoSeleccionado)){
+                productoActualizado = productoControllerService.actualizarProducto(codigoUnico,productoDto);
+                if(productoActualizado){
+                    listaProductosDto.remove(productoSeleccionado);
+                    listaProductosDto.add(productoDto);
+                    tableProductos.refresh();
+                    mostrarMensaje("Notificación producto", "Producto actualizado", "El producto se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                    limpiarCamposProductos();
+                    registrarAcciones("Producto actualizado",1, "Actualizar producto");
+                }else{
+                    mostrarMensaje("Notificación producto", "Producto no actualizado", "El producto no se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                }
+            }else{
+                mostrarMensaje("Notificación prodcuto", "Producto no creado", "Los datos ingresados son invalidos", Alert.AlertType.ERROR);
+            }
+
+        }
     }
 
     private ProductoDTO construirProductoDto(){
@@ -147,6 +200,10 @@ public class ProductoViewController {
         txfFechaPublicacion.setText("");
         txfFechaFinPublicacion.setText("");
         txfTipoProducto.setText("");
+    }
+
+    private void registrarAcciones(String mensaje, int nivel, String accion) {
+        productoControllerService.registrarAcciones(mensaje, nivel,accion);
     }
 
     private boolean datosValidos(ProductoDTO productoDto){
@@ -262,6 +319,8 @@ public class ProductoViewController {
             return false;
         }
     }
+
+
 
 }
 

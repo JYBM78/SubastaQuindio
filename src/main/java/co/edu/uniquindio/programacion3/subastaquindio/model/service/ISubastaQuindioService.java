@@ -14,4 +14,11 @@ public interface ISubastaQuindioService {
     boolean verificarProductoExistente(String codigoUnico) throws ProductoException;
 
     ArrayList<Producto> obtenerProducto();
+
+    Producto obtenerProducto(String codigoUnico);
+
+    Boolean eliminarProducto(String codigoUnico) throws ProductoException;
+
+
+    boolean actualizarProducto(String codigoUnico, Producto producto) throws ProductoException;
 }
