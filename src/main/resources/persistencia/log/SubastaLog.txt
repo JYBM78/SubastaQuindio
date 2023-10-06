@@ -17,3 +17,5 @@ oct. 05, 2023 8:45:56 P. M. co.edu.uniquindio.programacion3.subastaquindio.util
 INFORMACIÓN: inicioSesión,Inicio de sesión,2023-10-05
 oct. 05, 2023 8:46:59 P. M. co.edu.uniquindio.programacion3.subastaquindio.utils.ArchivoUtil guardarRegistroLog
 INFORMACIÓN: inicioSesión,Inicio de sesión,2023-10-05
+oct. 05, 2023 9:35:13 P. M. co.edu.uniquindio.programacion3.subastaquindio.utils.ArchivoUtil guardarRegistroLog
+INFORMACIÓN: inicioSesión,Inicio de sesión,2023-10-05
