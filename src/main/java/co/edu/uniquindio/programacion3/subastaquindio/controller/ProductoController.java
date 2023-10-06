@@ -15,7 +15,6 @@ public class ProductoController implements IProductoControllerService {
 
     @Override
     public List<ProductoDTO> obtenerProductos() {
-
         return modelFactoryController.obtenerProductos();
     }
 
@@ -31,7 +30,14 @@ public class ProductoController implements IProductoControllerService {
     }
 
     @Override
-    public boolean actualizarProducto(String codigoUnico, ProductoDTO productoDTO) {
-        return modelFactoryController.actualizarProducto(codigoUnico, productoDTO);
+    public boolean actualizarProducto(String codigoUnico, ProductoDTO productoDto) {
+
+        return modelFactoryController.actualizarProducto(codigoUnico, productoDto);
+    }
+
+    @Override
+    public void registrarAcciones(String mensaje, int nivel, String accion) {
+        modelFactoryController.registrarAccionesSistema(mensaje, nivel, accion);
+
     }
 }

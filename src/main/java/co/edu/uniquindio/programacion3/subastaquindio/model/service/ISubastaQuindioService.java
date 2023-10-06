@@ -20,4 +20,11 @@ public interface ISubastaQuindioService {
     Producto obtenerProducto(String codigoUnico);
 
     ArrayList<Producto> obtenerProducto();
+
+    Producto obtenerProducto(String codigoUnico);
+
+    Boolean eliminarProducto(String codigoUnico) throws ProductoException;
+
+
+    boolean actualizarProducto(String codigoUnico, Producto producto) throws ProductoException;
 }

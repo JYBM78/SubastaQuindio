@@ -2,6 +2,8 @@ module co.edu.uniquindio.programacion3.subastaquindio {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.mapstruct;
+    requires java.desktop;
+    requires java.logging;
 
 
     opens co.edu.uniquindio.programacion3.subastaquindio to javafx.fxml;

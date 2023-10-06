@@ -89,7 +89,7 @@ public class ProductoViewController {
     @FXML
     void actualizarProducto(ActionEvent event) {
 
-        actualizarProducto();
+        actualizarProdcucto();
 
     }
 
@@ -116,10 +116,11 @@ public class ProductoViewController {
         if(datosValidos(productoDTO)){
             if(productoControllerService.agregarProducto(productoDTO)){
                 listaProductosDto.add(productoDTO);
-                mostrarMensaje("notificación productos", "Producto creado", "El producto se ha creado con éxito", Alert.AlertType.INFORMATION);
+                mostrarMensaje("notificación productos", "Producto creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
                 limpiarCamposProductos();
+                registrarAcciones("Producto agregado",1, "Agregar producto");
             }else{
-                mostrarMensaje("notificación productos", "Producto NO creado", "El producto NO se ha creado con éxito", Alert.AlertType.ERROR);
+                mostrarMensaje("notificación productos", "Producto NO creado", "El empleado NO se ha creado con éxito", Alert.AlertType.ERROR);
             }
         }else{
             mostrarMensaje("notificación productos", "Producto NO creado", "Los datos ingresados son inválidos", Alert.AlertType.ERROR);
@@ -129,25 +130,26 @@ public class ProductoViewController {
 
     private void eliminarProducto() {
         boolean productoEliminado = false;
-        if (productoSeleccionado != null) {
-            if (mostrarMensajeConfirmacion("¿Estas seguro de eliminar el producto?")) {
+        if(productoSeleccionado != null){
+            if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar al empleado?")){
                 productoEliminado = productoControllerService.eliminarProducto(productoSeleccionado.codigoUnico());
-                if (productoEliminado == true) {
+                if(productoEliminado == true){
                     listaProductosDto.remove(productoSeleccionado);
                     productoSeleccionado = null;
                     tableProductos.getSelectionModel().clearSelection();
                     limpiarCamposProductos();
-                    mostrarMensaje("Notificación productos", "Producto eliminado", "El producto se ha eliminado con éxito", Alert.AlertType.INFORMATION);
-                } else {
-                    mostrarMensaje("Notificación productos", "Producto no eliminado", "El producto no se puede eliminar", Alert.AlertType.ERROR);
+                    registrarAcciones("Producto eliminado",1, "Eliminar producto");
+                    mostrarMensaje("Notificación producto", "Producto eliminado", "El producto se ha eliminado con éxito", Alert.AlertType.INFORMATION);
+                }else{
+                    mostrarMensaje("Notificación producto", "Producto no eliminado", "El producto no se puede eliminar", Alert.AlertType.ERROR);
                 }
             }
-        } else {
-            mostrarMensaje("Notificación producto", "Producto no seleccionado", "Seleccionado un producto de la lista", Alert.AlertType.WARNING);
+        }else{
+            mostrarMensaje("Notificación empleado", "Empleado no seleccionado", "Seleccionado un empleado de la lista", Alert.AlertType.WARNING);
         }
     }
 
-    private void actualizarProducto() {
+    private void actualizarProdcucto() {
         boolean productoActualizado = false;
         //1. Capturar los datos
         String codigoUnico = productoSeleccionado.codigoUnico();
@@ -163,11 +165,12 @@ public class ProductoViewController {
                     tableProductos.refresh();
                     mostrarMensaje("Notificación producto", "Producto actualizado", "El producto se ha actualizado con éxito", Alert.AlertType.INFORMATION);
                     limpiarCamposProductos();
+                    registrarAcciones("Producto actualizado",1, "Actualizar producto");
                 }else{
                     mostrarMensaje("Notificación producto", "Producto no actualizado", "El producto no se ha actualizado con éxito", Alert.AlertType.INFORMATION);
                 }
             }else{
-                mostrarMensaje("Notificación producto", "Producto no creado", "Los datos ingresados son inválidos", Alert.AlertType.ERROR);
+                mostrarMensaje("Notificación prodcuto", "Producto no creado", "Los datos ingresados son invalidos", Alert.AlertType.ERROR);
             }
 
         }
@@ -197,6 +200,10 @@ public class ProductoViewController {
         txfFechaPublicacion.setText("");
         txfFechaFinPublicacion.setText("");
         txfTipoProducto.setText("");
+    }
+
+    private void registrarAcciones(String mensaje, int nivel, String accion) {
+        productoControllerService.registrarAcciones(mensaje, nivel,accion);
     }
 
     private boolean datosValidos(ProductoDTO productoDto){
@@ -312,6 +319,8 @@ public class ProductoViewController {
             return false;
         }
     }
+
+
 
 }
 

@@ -108,6 +108,53 @@ public class SubastaQuindio implements ISubastaQuindioService {
 
     @Override
     public ArrayList<Producto> obtenerProducto() {
+
         return getListaProducto();
     }
+
+    @Override
+    public Producto obtenerProducto(String codigoUnico) {
+        Producto productoEncontrado = null;
+        for (Producto empleado : getListaProducto()) {
+            if(empleado.getCodigoUnico().equalsIgnoreCase(codigoUnico)){
+                productoEncontrado = empleado;
+                break;
+            }
+        }
+        return productoEncontrado;
+    }
+
+    @Override
+    public Boolean eliminarProducto(String codigoUnico) throws ProductoException {
+        Producto producto = null;
+        boolean flagExiste = false;
+        producto = obtenerProducto(codigoUnico);
+        if(producto == null)
+            throw new ProductoException("El empleado a eliminar no existe");
+        else{
+            getListaProducto().remove(producto);
+            flagExiste = true;
+        }
+        return flagExiste;
+    }
+
+    @Override
+    public boolean actualizarProducto(String codigoUnico, Producto producto) throws ProductoException {
+        Producto productoActual = obtenerProducto(codigoUnico);
+        if(productoActual == null)
+            throw new ProductoException("El producto a actualizar no existe");
+        else{
+            productoActual.setNombreProducto(producto.getNombreProducto());
+            productoActual.setAnunciante(producto.getAnunciante());
+            productoActual.setFoto(producto.getFoto());
+            productoActual.setCodigoUnico(producto.getCodigoUnico());
+            productoActual.setValorInicial(producto.getValorInicial());
+            productoActual.setFechaPublicacion(producto.getFechaPublicacion());
+            productoActual.setFechaFinPublicacion(producto.getFechaFinPublicacion());
+            productoActual.setTipoProducto(producto.getTipoProducto());
+            productoActual.setDescripcion(producto.getDescripcion());
+            return true;
+        }
+    }
+
 }
