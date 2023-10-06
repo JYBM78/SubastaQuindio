@@ -10,7 +10,7 @@ public class SubastaUtils {
 
             Producto producto = new Producto();
             producto.setCodigoUnico("1234");
-            producto.setNombreProducto("Lavadora HAceb");
+            producto.setNombreProducto("Lavadora HAcebeee");
             producto.setDescripcion("Lavadora casi nueva");
             producto.setAnunciante("Carlos Montes");
             producto.setTipoProducto("HOGAR");
